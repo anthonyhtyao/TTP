@@ -38,10 +38,37 @@ public class EulerianCycle {
 		return p;
 	}
 	
-	public static LinkedList<Arc> eular(HashMap<Ville,Collection<Arc>> doubleMST) {
+	public static LinkedList<Arc> eular(Ville s, HashMap<Ville,Collection<Arc>> doubleMST,int[][] degree) {
 		LinkedList<Arc> p1 = new LinkedList<Arc>();
 		LinkedList<Arc> p2 = new LinkedList<Arc>();
-		
-		return p1;
+		while (true) {
+			LinkedList<Arc> p = findCycle(s, doubleMST, degree);
+			p2.addAll(0,p);
+			if (p2.isEmpty())
+				return p1;
+			else {
+				Arc a = p2.remove();
+				p1.add(a);
+				s = a.target;
+			}
+		}
+	}
+	
+	public static LinkedList<Ville> TSP(LinkedList<Arc> eularCycle,int numberofNodes) {
+		boolean[] isVisited = new boolean[numberofNodes];
+		LinkedList<Ville> TSP = new LinkedList<Ville>();
+		Arc a = eularCycle.getFirst();
+		Ville v = a.source;
+		TSP.add(v);
+		isVisited[v.getNom()] = true;
+		while (!eularCycle.isEmpty()) {
+			a = eularCycle.remove();
+			v = a.target;
+			if (!isVisited[v.getNom()]) {
+				TSP.add(v);
+				isVisited[v.getNom()] = true;
+			}
+		}
+		return TSP;
 	}
 }
