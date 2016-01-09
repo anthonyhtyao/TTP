@@ -3,30 +3,26 @@ import graphe.*;
 
 import java.util.*;
 
-/*class EularianVille {
-	Ville v;
-	int d1;
-	int d2;
-	
-	public EularianVille(Ville o) {
-		v = o;
-		d1 = 0;
-		d2 = 0;
-	}
-	
-	public EularianVille(Ville o, int i, int j) {
-		v = o;
-		d1 = i;
-		d2 = j;
-	}
-}*/
-
 public class EulerianCycle {
 	
+	/*Calcul degree of each node*/
+	public static int[][] degree(HashMap<Ville,Collection<Arc>> doubleMST, int numberofNodes) {
+		int[][] degree = new int[numberofNodes][2];
+		Collection<Collection<Arc>> lst = doubleMST.values();
+		for(Collection<Arc> c:lst) {
+			for(Arc a:c) {
+				degree[a.source.getNom()][0] += 1;
+				degree[a.target.getNom()][1] += 1;
+			}
+		}
+		return degree;
+	}
+	
+	/*Find a cycle started by Ville s*/
 	public static LinkedList<Arc> findCycle(Ville s, HashMap<Ville,Collection<Arc>> doubleMST,int[][] degree) {
 		LinkedList<Arc> p = new LinkedList<Arc>();
 		Ville v =s;
-		while (degree[s.getNom()][0] != 0) {
+		while (degree[v.getNom()][0] != 0) {
 			Collection<Arc> arcs = doubleMST.get(v);
 			Arc a = arcs.iterator().next();
 			p.add(a);
@@ -38,7 +34,9 @@ public class EulerianCycle {
 		return p;
 	}
 	
-	public static LinkedList<Arc> eular(Ville s, HashMap<Ville,Collection<Arc>> doubleMST,int[][] degree) {
+	/*Find Eularian cycle started by Ville s (random?)*/
+	public static LinkedList<Arc> eular(Ville s, HashMap<Ville,Collection<Arc>> doubleMST, int numberofNodes) {
+		int[][] degree = degree(doubleMST,numberofNodes);
 		LinkedList<Arc> p1 = new LinkedList<Arc>();
 		LinkedList<Arc> p2 = new LinkedList<Arc>();
 		while (true) {
@@ -54,7 +52,10 @@ public class EulerianCycle {
 		}
 	}
 	
-	public static LinkedList<Ville> TSP(LinkedList<Arc> eularCycle,int numberofNodes) {
+	/*Return TSP*/
+	public static LinkedList<Ville> TSP(HashMap<Ville,Collection<Arc>> doubleMST,int numberofNodes) {
+		Ville s = doubleMST.values().iterator().next().iterator().next().source; /*Get a start Ville. Need a random function*/
+		LinkedList<Arc> eularCycle = eular(s,doubleMST,numberofNodes);
 		boolean[] isVisited = new boolean[numberofNodes];
 		LinkedList<Ville> TSP = new LinkedList<Ville>();
 		Arc a = eularCycle.getFirst();

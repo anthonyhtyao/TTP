@@ -6,8 +6,7 @@ public class Ville {
 
     private final int nom;
 
-    // -180 < long < 180
-    // -90 < lat < 90
+   
     private final double latitude, longitude;
     static int precision=2;
 
@@ -68,9 +67,7 @@ public class Ville {
     }
 
     public int hashCode(){
-	long x=getRoundLatitude();
-	long y=getRoundLongitude();
-	return (int) ((x*(29*(Math.pow(10.,precision)))+y)%Integer.MAX_VALUE);
+	return nom;
     }
 }
 

@@ -65,7 +65,7 @@ public class SpanningTree {
     		if (colonne2 == null) {
     			colonne2 = new ArrayList<Arc>();
     			colonne2.add(b);
-    			arcsMap.put(v1, colonne2);
+    			arcsMap.put(v2, colonne2);
     		}
     		else {
     			colonne2.add(b);

@@ -13,7 +13,9 @@ import java.util.logging.Logger;
 
 import arbres.*;
 import graphe.*;
+import java.util.*;
 
+import jdk.nashorn.internal.ir.CallNode.EvalArgs;
 /**
  * This class provides a representation of an instance of TTP
  * Input/output methods for reading/printing instance parameters from fle are also provided
@@ -41,9 +43,23 @@ public class TTPInstance {
     	}
         TTPInstance test = new TTPInstance(input);
         System.out.println("done");
+        
         ArrayList<Arc> listArc = SpanningTree.touslesArc(test);
-        HashMap<Ville,Collection<Arc>> doubleMST = SpanningTree.doubleMST(listArc); 
-        //test.printInstance(false);
+        HashMap<Ville,Collection<Arc>> doubleMST = SpanningTree.doubleMST(listArc); /*Get MST solution*/
+        LinkedList<Ville> TSP = EulerianCycle.TSP(doubleMST, test.numberOfNodes); /*Get TSP solution*/
+        int[] TTPItem = SampleHeuristic.SH(test, TSP); /*Get TTP item solution*/
+        int[] tour = new int[TSP.size()+1];
+        int ind = 0;
+        for (Ville v:TSP) {
+        	tour[ind] = v.getNom();
+        	ind++;
+        }
+        tour[ind] = tour[0];
+       
+        TTPSolution answer = new TTPSolution(tour, TTPItem);
+        test.evaluate(answer);
+        answer.writeResult("test");
+        test.printInstance(false);
     }
     
     public String problemName;
